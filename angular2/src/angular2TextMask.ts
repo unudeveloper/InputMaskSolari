@@ -27,6 +27,37 @@ function _isAndroid(): boolean {
   return /android (\d+)/.test(userAgent.toLowerCase())
 }
 
+function getMergedOptions(element, config, seriesId) {
+    var mergedOptions = {};
+
+    var defaultOptions = {
+      chart: {
+        events: {}
+      },
+      title: {},
+      subtitle: {},
+      series: [],
+      credits: {},
+      plotOptions: {},
+      navigator: {},
+    };
+
+    if (config) {
+      //check all series and axis ids are set
+      if (config.series) {
+        ensureIds(config.series, seriesId);
+      }
+
+      mergedOptions = angular.merge(defaultOptions, config);
+    } else {
+      mergedOptions = defaultOptions;
+    }
+    mergedOptions.chart.renderTo = element[0];
+
+    //check chart type is set
+    return mergedOptions;
+  }
+
 @Directive({
   host: {
     '(input)': '_handleInput($event.target.value)',
